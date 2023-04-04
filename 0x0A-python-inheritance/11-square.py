@@ -1,53 +1,44 @@
 #!/usr/bin/python3
+"""Defines a class Square based on 9-rectangle.py.
+
+Attributes:
+    width (int): width of the rectangle.
+    height (int): height of the rectangle.
 """
-Contains the class BaseGeometry and subclass Rectangle
-"""
 
 
-class BaseGeometry:
-    """A class with public instance methods area and integer_validator"""
-    def area(self):
-        """raises an exception when called"""
-        raise Exception("area() is not implemented")
-
-    def integer_validator(self, name, value):
-        """validates that value is an integer greater than 0"""
-        if type(value) is not int:
-            raise TypeError("{:s} must be an integer".format(name))
-        if value <= 0:
-            raise ValueError("{:s} must be greater than 0".format(name))
-
-
-class Rectangle(BaseGeometry):
-    """A representation of a rectangle"""
-    def __init__(self, width, height):
-        """instantiation of the rectangle"""
-        self.integer_validator("width", width)
-        self.__width = width
-        self.integer_validator("height", height)
-        self.__height = height
-
-    def area(self):
-        """returns the area of the rectangle"""
-        return self.__width * self.__height
-
-    def __str__(self):
-        """informal string representation of the rectangle"""
-        return "[Rectangle] {:d}/{:d}".format(self.__width, self.__height)
+Rectangle = __import__('9-rectangle').Rectangle
 
 
 class Square(Rectangle):
-    """A representation of a square"""
+    """Defines a class Square.
+
+    Args:
+        Rectangle (Rectangle): rectangle
+    """
+
     def __init__(self, size):
-        """instantiation of the square"""
+        """Creates new instances of class Square.
+
+        Args:
+            size (int): size of 1 side of square.
+        """
         self.integer_validator("size", size)
         self.__size = size
         super().__init__(size, size)
 
-    def area(self):
-        """"returns the area of the square"""
-        return self.__size ** 2
-
     def __str__(self):
-        """informal string reepresentation of the square"""
-        return "[Square] {:d}/{:d}".format(self.__size, self.__size)
+        """Returns a string representation of the square.
+
+        Returns:
+            str: square.
+        """
+        return ("[Square] {}/{}".format(self.__size, self.__size))
+
+    def area(self):
+        """Calculates the area of a square.
+
+        Returns:
+            int: the area of the square.
+        """
+        return self.__size ** 2

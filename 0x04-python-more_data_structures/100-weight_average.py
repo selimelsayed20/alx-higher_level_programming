@@ -1,12 +1,19 @@
 #!/usr/bin/python3
+
 def weight_average(my_list=[]):
-    average = 0
-    totalWeight = 0
-    totalScore = 0
-    if (len(my_list) <= 0):
-        return (0)
-    for item in my_list:
-        score, weight = item
-        totalWeight += weight
-        totalScore += score * weight
-    return totalScore / totalWeight
+    """ returns the weighted average of all integers tuple (<score>, <weight>)
+    Returns 0 if the list is empty
+    You are not allowed to import any module
+    """
+    if not my_list:
+        return 0
+
+    weight_sum = 0
+    score_product = 0
+
+    for sub in my_list:
+        score_product += sub[0] * sub[1]
+        weight_sum += sub[1]
+    result = score_product / weight_sum
+
+    return result

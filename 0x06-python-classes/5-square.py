@@ -3,57 +3,56 @@
 
 
 class Square:
-    """Represents a square
+    """
+    Class that defines properties of square by: (based on 4-square.py).
+
     Attributes:
-        __size (int): size of a side of the square
+        size: size of a square (1 side).
     """
     def __init__(self, size=0):
-        """initializes the square
+        """Creates new instances of square.
+
         Args:
-            size (int): size of a side of the square
-        Returns:
-            None
+            size: size of the square (1 side).
         """
-        self.size = size
+        self.__size = size
 
     def area(self):
-        """calculates the square's area
-        Returns:
-            The area of the square
+        """Calculates the area of square.
+
+        Returns: the current square area.
         """
-        return (self.__size) ** 2
+        return self.__size ** 2
 
     @property
     def size(self):
-        """getter of __size
-        Returns:
-            The size of the square
+        """Returns the size of a square
         """
         return self.__size
 
     @size.setter
     def size(self, value):
-        """setter of __size
+        """Property setter for size.
+
         Args:
-            value (int): size of a side of the square
-        Returns:
-            None
+            value (int): size of a square (1 side).
+
+        Raises:
+            TypeError: size must be an integer
+            ValueError: size must be >= 0
         """
-        if type(value) is not int:
+        if not isinstance(value, int):
             raise TypeError("size must be an integer")
+        elif value < 0:
+            raise ValueError("size must be >= 0")
         else:
-            if value < 0:
-                raise ValueError("size must be >= 0")
-            else:
-                self.__size = value
+            self.__size = value
 
     def my_print(self):
-        """prints the square
-        Returns:
-            None
+        """prints in stdout the square with the character #
         """
+
         if self.__size == 0:
             print()
-            return
         for i in range(self.__size):
-            print("".join(["#" for j in range(self.__size)]))
+            print("#" * (self.__size))

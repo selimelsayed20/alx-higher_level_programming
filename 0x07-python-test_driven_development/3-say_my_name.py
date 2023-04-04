@@ -1,14 +1,25 @@
 #!/usr/bin/python3
-"""
-This is the "3-say_my-name" module.
-The 3-say_my_name  module supplies one function, say_my_name.
+"""Defines a function that prints my name.
+
+Attributes:
+    say_my_name: function that prints my name.
 """
 
 
 def say_my_name(first_name, last_name=""):
-    """Prints "My name is" followed by the first name and optional last name"""
-    if type(first_name) is not str:
+    """Prints my name.
+
+    Args:
+        first_name (str): My first name.
+        last_name (str, optional): My second name. Defaults to "".
+
+    Raises:
+        TypeError: If either first name or last name is not a string.
+    """
+    if not isinstance(first_name, str):
         raise TypeError("first_name must be a string")
-    if type(last_name) is not str:
+
+    if not isinstance(last_name, str):
         raise TypeError("last_name must be a string")
-    print("My name is", first_name, last_name)
+
+    print("My name is {} {}".format(first_name, last_name))
