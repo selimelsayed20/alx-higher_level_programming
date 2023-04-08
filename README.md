@@ -2,11 +2,9 @@
 **Higher-level programming & Algorithm**
 
 ## Author's Details
-Name: *Wendy Munyasi.*
+Name: *Selim Elsayed.*
 
-Email: *wendymunyasi@gmail.com*
-
-Tel: *+254707240068.*
+Email: *saleemelsayed17@gmail.com*
 
 ## Technologies
 * Shell Scripts written in Bash 5.0.17(1).
