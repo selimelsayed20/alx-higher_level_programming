@@ -2,9 +2,9 @@
 **0x00. Python - Hello, World**
 
 ## Author's Details
-Name: *Wendy Munyasi.*
+Name: *Selim Elsayed.*
 
-Email: *wendymunyasi@gmail.com*
+Email: *saleemelsayed17@gmail.com*
 
 Tel: *+254707240068.*
 
