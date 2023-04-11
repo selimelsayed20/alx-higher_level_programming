@@ -2,11 +2,10 @@
 **0x0A. Python - Inheritance**
 
 ## Author's Details
-Name: *Wendy Munyasi.*
+Name: *selim elsayed.*
 
-Email: *wendymunyasi@gmail.com*
+Email: *saleemelsayed17@gmail.com*
 
-Tel: *+254707240068.*
 
 ##  Requirements
 
