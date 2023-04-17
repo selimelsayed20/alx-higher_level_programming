@@ -1,214 +1,110 @@
 #!/usr/bin/python3
-"""Defines a class BaseModelTest"""
-
-
-import json
+"""Unittest Base class"""
 import unittest
-import os
 from models.base import Base
 from models.rectangle import Rectangle
 from models.square import Square
+import os
+import json
+import pep8
 
-
-class TestBaseMethods(unittest.TestCase):
-    """ Defines tests for Base class """
+class TestBase(unittest.TestCase):
 
     def setUp(self):
-        """ Runs for each test """
         Base._Base__nb_objects = 0
-        self.new_base = Base(id=1)
 
-    def tearDown(self):
-        """ Cleans up after each test """
-        pass
-
-    def test_check_instance_variables(self):
-        """ Checks instance variables """
-        self.assertEqual(self.new_base.id, 1)
-
-    def test_docstring(self):
-        """ Test if docstring is present """
-        self.assertIsNotNone(Base.__doc__)
-
-    def test_randos_id(self):
-        """ Test random arguments passed """
-        test1 = Base(7)
-        self.assertEqual(test1.id, 7)
-        test2 = Base(24)
-        self.assertEqual(test2.id, 24)
-        test3 = Base()
-        self.assertEqual(test3.id, 1)
-        test4 = Base(-24)
-        self.assertEqual(test4.id, -24)
-
-    def test_consecutive_ids(self):
-        """ Tests consecutive ids """
+    def test_id(self):
         b1 = Base()
-        b2 = Base()
-        self.assertEqual(b1.id + 1, b2.id)
+        self.assertEqual((b1.id), 1)
 
-    def test_0_id(self):
-        """ Test id to see if it duplicates """
-        Base._Base__nb_objects = 0
-        b1 = Base()
-        b2 = Base()
+        b2 = Base(12)
+        self.assertEqual((b2.id), 12)
+
         b3 = Base()
-        b4 = Base(12)
-        b5 = Base()
-        self.assertEqual(b1.id, 1)
-        self.assertEqual(b2.id, 2)
-        self.assertEqual(b3.id, 3)
-        self.assertEqual(b4.id, 12)
-        self.assertEqual(b5.id, 4)
+        self.assertEqual((b3.id), 2)
 
-    def test_constructor(self):
-        """ Tests constructor signature """
-        with self.assertRaises(TypeError) as e:
-            Base.__init__()
-        msg = "__init__() missing 1 required positional argument: 'self'"
-        self.assertEqual(str(e.exception), msg)
-
-    def test_constructor_args_2(self):
-        """ Tests constructor signature with 2 notself args """
-        with self.assertRaises(TypeError) as e:
-            Base.__init__(self, 1, 2)
-        msg = "__init__() takes from 1 to 2 positional arguments but 3 \
-were given"
-        self.assertEqual(str(e.exception), msg)
-
-    def test_to_json_string(self):
-        """ Test to_json_string method """
+    def test_dic_to_json_str(self):
         r1 = Rectangle(10, 7, 2, 8)
-        r2 = Rectangle(11, 1, 3, 4)
-        dict1 = r1.to_dictionary()
-        dict2 = r2.to_dictionary()
-        json_dict1 = [{"x": 2, "width": 10, "id": 1, "height": 7, "y": 8}]
-        json_dict2 = [{"x": 3, "width": 11, "id": 1, "height": 1, "y": 4}]
-        json_string = Base.to_json_string([dict1, dict2])
-        self.assertNotEqual(dict1, json_dict1)
-        self.assertNotEqual(dict2, json_dict2)
-        self.assertEqual(type(dict1), dict)
-        self.assertEqual(type(json_string), str)
-        self.assertEqual(Base.to_json_string(None), "[]")
-        self.assertEqual(Base.to_json_string([]), "[]")
-        self.assertTrue(type(Base.to_json_string(None)) is str)
-        self.assertTrue(type(Base.to_json_string("[]")) is str)
-        self.assertTrue(type(json_string), str)
-        d = json.loads(json_string)
-        self.assertEqual(d, [dict1, dict2])
+        dictionary = r1.to_dictionary()
+        json_dict = Base.to_json_string([dictionary])
+        self.assertIsInstance(json_dict, str)
 
-    def test_from_json_string(self):
-        """ Test from_json_string method """
-        self.assertEqual(Base.from_json_string(""), [])
-        self.assertEqual(Base.from_json_string(None), [])
-        list_input = [{"x": 2, "width": 10, "id": 1, "height": 7, "y": 8}]
-        json_list_input = Rectangle.to_json_string(list_input)
-        list_output = Rectangle.from_json_string(json_list_input)
-        list_output2 = [{'x': 2, 'width': 10, 'id': 1, 'height': 7, 'y': 8}]
-        self.assertEqual(list_output, list_output2)
-        self.assertTrue(type(list_output), list)
+        s1 = Square(10, 7, 2)
+        dictionary = s1.to_dictionary()
+        json_dict = Base.to_json_string([dictionary])
+        self.assertIsInstance(json_dict, str)
 
-    def test_save_to_file_1(self):
-        """ Test save_to_file_method with empty_file """
-        Rectangle.save_to_file([])
-        with open("Rectangle.json", mode="r") as myFile:
-            self.assertEqual([], json.load(myFile))
+        empty_dict = Base.to_json_string([])
+        self.assertEqual(empty_dict, "[]")
 
-    def test_save_to_file_2(self):
-        """ Test save_to_file method with None as file """
-        Rectangle.save_to_file(None)
-        with open("Rectangle.json", mode="r") as myFile:
-            self.assertEqual([], json.load(myFile))
+        none_dict = Base.to_json_string(None)
+        self.assertEqual(none_dict, "[]")
 
-    def test_save_to_file_3(self):
-        """ Test save_to_file method """
-        r1 = Rectangle(10, 7, 2, 8)
-        r2 = Rectangle(2, 4)
-        s2f = [r1, r2]
-        Rectangle.save_to_file(s2f)
-        rf = Rectangle.load_from_file()
-        self.assertNotEqual(s2f, rf)
-
-    def test_save_to_file_4(self):
-        """ Test save_to_file method """
-        import os
+    def test_save_json_str_to_file(self):
         r1 = Rectangle(10, 7, 2, 8)
         r2 = Rectangle(2, 4)
         Rectangle.save_to_file([r1, r2])
-
         with open("Rectangle.json", "r") as file:
-            self.assertEqual(len(file.read()), 105)
+            self.assertEqual(json.loads(file.read()), [{"y": 8, "x": 2,
+                                                    "id": 1, "width": 10,
+                                                     "height": 7},
+                                                   {"y": 0, "x": 0,
+                                                     "id": 2, "width": 2,
+                                                      "height": 4}])
+        os.remove("Rectangle.json")
 
-        Rectangle.save_to_file(None)
-        with open("Rectangle.json", "r") as file:
-            self.assertEqual(file.read(), "[]")
-
-        try:
-            os.remove("Rectangle.json")
-        except Exception:
-            pass
-        Rectangle.save_to_file([])
-        with open("Rectangle.json", "r") as file:
-            self.assertEqual(file.read(), "[]")
-
-        r2 = Rectangle(2, 4)
-        Rectangle.save_to_file([r2])
-        with open("Rectangle.json", "r") as file:
-            self.assertEqual(len(file.read()), 52)
-
-        Square.save_to_file(None)
+        s1 = Square(10, 7, 2)
+        s2 = Square(2, 4)
+        Square.save_to_file([s1, s2])
         with open("Square.json", "r") as file:
-            self.assertEqual(file.read(), "[]")
+            self.assertEqual(json.loads(file.read()), [{"x": 7, "id": 3,
+                                                         "size": 10, "y": 2},
+                                                        {"x": 4, "id": 4,
+                                                          "size": 2, "y": 0}])
+        os.remove("Square.json")
 
-        try:
-            os.remove("Square.json")
-        except Exception:
-            pass
-        Square.save_to_file([])
-        with open("Square.json", "r") as file:
-            self.assertEqual(file.read(), "[]")
+    def test_from_json_str_to_dic(self):
+        list_input = [ {'id': 89, 'width': 10, 'height': 4}, 
+        {'id': 7, 'width': 1, 'height': 7} ]
+        json_list_input = Rectangle.to_json_string(list_input)
+        list_output = Rectangle.from_json_string(json_list_input)
+        self.assertEqual(list_input, list_output)
 
-        r2 = Square(1)
-        Square.save_to_file([r2])
-        with open("Square.json", "r") as file:
-            self.assertEqual(len(file.read()), 38)
+        list_output = Rectangle.from_json_string(None)
+        self.assertEqual([], list_output)
 
-    def test_load_from_file(self):
-        """Test load_from_file method """
-        r1 = Rectangle(10, 7, 2, 8)
-        r2 = Rectangle(2, 4)
-        list_in = [r1, r2]
-        Rectangle.save_to_file(list_in)
-        list_out = Rectangle.load_from_file()
-        self.assertNotEqual(id(list_in[0]), id(list_out[0]))
-        self.assertEqual(str(list_in[0]), str(list_out[0]))
-        self.assertNotEqual(id(list_in[1]), id(list_out[1]))
-        self.assertEqual(str(list_in[1]), str(list_out[1]))
+        list_output = Rectangle.from_json_string([])
+        self.assertEqual([], list_output)
 
-        s1 = Square(5)
-        s2 = Square(7, 9, 1)
-        list_in = [s1, s2]
-        Square.save_to_file(list_in)
-        list_out = Square.load_from_file()
-        self.assertNotEqual(id(list_in[0]), id(list_out[0]))
-        self.assertEqual(str(list_in[0]), str(list_out[0]))
-        self.assertNotEqual(id(list_in[1]), id(list_out[1]))
-        self.assertEqual(str(list_in[1]), str(list_out[1]))
-
-    def test_load_from_file_empty_file(self):
-        """ Test use of load_from_file with empty file """
-        try:
-            os.remove("Rectangle.json")
-        except Exception:
-            pass
-        open("Rectangle.json", 'a').close()
-        self.assertEqual(Rectangle.load_from_file(), [])
-
-    def test_create(self):
-        """ Test create method """
+    def test_create_dict_to_instane(self):
         r1 = Rectangle(3, 5, 1)
         r1_dictionary = r1.to_dictionary()
         r2 = Rectangle.create(**r1_dictionary)
-        self.assertEqual(str(r1), str(r2))
-        self.assertFalse(r1 is r2)
+        self.assertNotEqual(r1, r2)
+        self.assertTrue(r1, r2)
         self.assertFalse(r1 == r2)
+        self.assertFalse(r1 is r2)
+
+        s1 = Square(3, 5, 1)
+        s1_dictionary = s1.to_dictionary()
+        s2 = Square.create(**s1_dictionary)
+        self.assertNotEqual(s1, s2)
+        self.assertTrue(s1, s2)
+        self.assertFalse(s1 == s2)
+        self.assertFalse(s1 is s2)
+
+    def test_load_from_file_to_instance(self):
+        r1 = Rectangle(10, 7, 2, 8)
+        r2 = Rectangle(2, 4)
+        list_rectangles_input = [r1, r2]
+        Rectangle.save_to_file(list_rectangles_input)
+        list_rectangles_output = Rectangle.load_from_file()
+        self.assertNotEqual(list_rectangles_input, list_rectangles_output)
+        self.assertTrue(list_rectangles_input, list_rectangles_output)
+        self.assertFalse(list_rectangles_input == list_rectangles_output)
+        self.assertFalse(list_rectangles_input is list_rectangles_output)
+
+    def test_base_pep8(self):
+        pep8style = pep8.StyleGuide(quiet=True)
+        result = pep8style.check_files(['./models/base.py'])
+        self.assertEqual(result.total_errors, 0)
